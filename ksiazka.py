@@ -43,6 +43,7 @@ class KsiazkaAdresowa(QWidget):
         uklad_wyszukiwania.addWidget(self.kryterium_wyszukiwania)
         uklad_wyszukiwania.addWidget(przycisk_szukaj)
         uklad_glowny.addLayout(uklad_wyszukiwania)
+
         self.przycisk_statystyki = QPushButton("Pokaż statystyki miast")
         self.przycisk_statystyki.clicked.connect(self.pokaz_statystyki)
         uklad_glowny.addWidget(self.przycisk_statystyki)
@@ -53,7 +54,11 @@ class KsiazkaAdresowa(QWidget):
     def dodaj_adres(self):
         nowy_kontakt = {}
         for k in self.pola:
-            nowy_kontakt[k] = self.pola[k].text().strip()
+            tekst = self.pola[k].text().strip()
+            if not tekst:
+                QMessageBox.warning(self, "Błąd", f"Pole '{k}' nie może być puste!")
+                return
+            nowy_kontakt[k] = tekst
         for i in self.kontakty:
             if i['Imię'].lower() == nowy_kontakt['Imię'].lower() and i['Nazwisko'].lower() == nowy_kontakt['Nazwisko'].lower():
                 QMessageBox.warning(self, "Błąd", "Taki użytkownik już istnieje!")
